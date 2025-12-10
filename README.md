@@ -80,8 +80,31 @@ python src/main.py
 
   ```text
   outputs/
+ 
   ├── product_page.json
   ├── faq.json
+```
+## Output Screenshot
+## Code Running Succesfully
+<img width="946" height="323" alt="image" src="https://github.com/user-attachments/assets/19020a14-fec5-4df6-bad3-f51a8b87eb21" />
+
   └── comparison_page.json
+
+### Succesfully Getting the Desired Output
+
+## FAQ Page
+
+<img width="1638" height="789" alt="image" src="https://github.com/user-attachments/assets/0fdae4bf-88de-4de6-8201-96b8f96da079" />
+
+## Comparision Page
+
+<img width="1651" height="905" alt="image" src="https://github.com/user-attachments/assets/d56804bf-2c08-4bb7-82a7-93918fcf77d8" />
+
+## Product Page
+
+<img width="1500" height="461" alt="image" src="https://github.com/user-attachments/assets/9a614280-9838-4cb4-849e-c0b46524e263" />
+
+
+
 
 
