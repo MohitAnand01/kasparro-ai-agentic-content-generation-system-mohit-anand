@@ -1,0 +1,44 @@
+{
+  "title": "GlowBoost Vitamin C Serum vs RadiantShield Vitamin C Complex",
+  "base_product": {
+    "name": "GlowBoost Vitamin C Serum",
+    "ingredients": [
+      "Vitamin C",
+      "Hyaluronic Acid"
+    ],
+    "benefits": [
+      "Brightening",
+      "Fades dark spots"
+    ],
+    "price": "₹699"
+  },
+  "other_product": {
+    "name": "RadiantShield Vitamin C Complex",
+    "ingredients": [
+      "Vitamin C",
+      "Niacinamide"
+    ],
+    "benefits": [
+      "Brightening",
+      "Evens skin tone"
+    ],
+    "price": "₹899"
+  },
+  "comparison_points": [
+    {
+      "aspect": "Ingredients",
+      "base": "Vitamin C, Hyaluronic Acid",
+      "other": "Vitamin C, Niacinamide"
+    },
+    {
+      "aspect": "Benefits",
+      "base": "Brightening, Fades dark spots",
+      "other": "Brightening, Evens skin tone"
+    },
+    {
+      "aspect": "Price",
+      "base": "₹699",
+      "other": "₹899"
+    }
+  ]
+}
