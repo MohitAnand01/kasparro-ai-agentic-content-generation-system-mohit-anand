@@ -60,24 +60,24 @@
   python -m venv venv
   venv\Scripts\activate
   ```
-  ##3️⃣ Install Dependencies
+  ## 3️⃣ Install Dependencies
 
-  #Even though this project has minimal dependencies, install them via:
+  Even though this project has minimal dependencies, install them via:
 ```bash
 
 pip install -r requirements.txt
 ```
 
-##4️⃣ Run the Pipeline
+ ## 4️⃣ Run the Pipeline
 
-#Run the orchestrator using:
+Run the orchestrator using:
 ```bash
 
 python src/main.py
 ```
 
 
-###After execution, the system will generate output JSON files inside:
+### After execution, the system will generate output JSON files inside:
 
 outputs/
 ├── product_page.json
