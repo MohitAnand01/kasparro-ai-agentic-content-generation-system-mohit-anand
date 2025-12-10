@@ -1,96 +1,249 @@
-# Multi-Agent Content Generation System — GlowBoost Vitamin C Serum
+content: |
+  # 📘 Multi-Agent Content Generation System — Technical Documentation
+  ### Kasparro AI Engineer Challenge  
+  ### Author: Mohit Anand  
 
-## Problem Statement
+  ---
 
-Design and implement a modular, agentic automation system that takes a small, fixed product dataset (GlowBoost Vitamin C Serum) and automatically generates multiple structured, machine-readable content pages — specifically:
+  # 1. Overview
 
-- FAQ Page (with at least 5 Q&A items)
-- Product Description Page
-- Comparison Page (GlowBoost vs a fictional Product B)
+  This document provides a complete technical explanation of the **Multi-Agent Content Generation System** developed for the Kasparro AI Engineer Challenge.
 
-The system must:
+  The system takes a small raw dataset describing **GlowBoost Vitamin C Serum** and automatically generates three structured machine-readable JSON pages:
 
-- Use only the given product data (no external research or knowledge).
-- Be built as a multi-agent system, not a single monolithic script.
-- Produce clean JSON outputs suitable for downstream consumption. :contentReference[oaicite:1]{index=1}  
+  - `product_page.json`
+  - `faq.json`
+  - `comparison_page.json`
 
+  The solution uses:
 
-## Solution Overview
+  - A multi-agent architecture  
+  - Reusable logic blocks  
+  - Page templates  
+  - A shared PageContext data model  
+  - A pipeline orchestrator  
 
-The solution is implemented as a **multi-agent pipeline** with clear responsibilities, reusable logic blocks, and a small template engine. It takes the raw product data for GlowBoost Vitamin C Serum, transforms it into an internal model, generates categorized questions, converts them into FAQ items, and finally assembles three JSON pages:
+  This documentation explains the workflow, components, architecture, diagrams, and execution steps in detail.
 
-- `faq.json`
-- `product_page.json`
-- `comparison_page.json`
+  ---
 
-High-level flow:
+  # 2. High-Level Architecture
 
-1. **ParserAgent** converts the raw product input into strongly-typed internal models.
-2. **QuestionGeneratorAgent** generates at least 15 user questions across categories (Informational, Usage, Safety, Purchase, Comparison).
-3. **ContentPlannerAgent** uses reusable logic blocks to convert questions into FAQ items.
-4. **PageAssemblerAgent** applies templates to assemble the Product Page and Comparison Page.
-5. A FAQ template consumes the FAQ items to build `faq.json`.
-6. The **Orchestrator** coordinates all agents and writes the final JSON files to the `outputs/` directory.
+  ```mermaid
+  flowchart TD
 
+  A[Raw Product Input] --> B[Parser Agent]
+  B -->|Creates PageContext| C[Question Generation Agent]
+  C -->|Generates Questions| D[Content Planner Agent]
+  D -->|Creates FAQ Items| E[Page Assembler Agent]
+  E -->|Templates + Logic Blocks| F[JSON Generator]
 
-## Scopes & Assumptions
+  F --> G1[product_page.json]
+  F --> G2[faq.json]
+  F --> G3[comparison_page.json]
+3. Folder Structure
+css
+Copy code
+src/
+│
+├── agents/
+│   ├── parser_agent.py
+│   ├── question_generator_agent.py
+│   ├── content_planner_agent.py
+│   └── page_assembler_agent.py
+│
+├── core/
+│   └── models.py
+│
+├── data/
+│   └── product_input.py
+│
+├── logic_blocks/
+│   ├── benefits_block.py
+│   ├── comparison_block.py
+│   ├── safety_block.py
+│   └── usage_block.py
+│
+├── orchestrator/
+│   └── flow.py
+│
+├── templates/
+│   ├── product_template.py
+│   ├── faq_template.py
+│   └── comparison_template.py
+│
+└── main.py
+4. Components Explained
+4.1 Raw Product Data
+Located in:
+src/data/product_input.py
 
-- **Single product input**  
-  The pipeline is designed around one product instance (GlowBoost Vitamin C Serum), but the internal models and agents can operate on any product with the same schema.
+Contains fields:
 
-- **No external knowledge**  
-  All generated content is derived strictly from the provided dataset:
-  - product name  
-  - concentration  
-  - skin types  
-  - key ingredients  
-  - benefits  
-  - how to use  
-  - side effects  
-  - price :contentReference[oaicite:2]{index=2}  
+product_name
 
-- **Fictional Product B**  
-  Product B is a fictional but structured product, defined inside the parser agent for comparison purposes only (name, ingredients, benefits, price).
+concentration
 
-- **System boundaries**  
-  - No UI / frontend is included.
-  - No database or external APIs are used.
-  - The system runs as a local Python CLI pipeline.
+skin_type
 
-- **Outputs**  
-  JSON outputs are written to `./outputs` and are treated as the final machine-readable pages for this assignment.
+key_ingredients
 
+benefits
 
-## System Design
+how_to_use
 
-### 1. Architecture Overview
+side_effects
 
-The system is structured as:
+price
 
-- **Core models** (`core.models`)
-  - `Product`, `FictionalProduct`, `Question`, `FAQItem`, `PageContext`
-- **Agents** (`agents.*`)
-  - Each agent has a single responsibility and defined inputs/outputs.
-- **Logic blocks** (`logic_blocks.*`)
-  - Pure functions that encapsulate reusable content logic.
-- **Templates** (`templates.*`)
-  - Page definitions that use logic blocks and context to build JSON structures.
-- **Orchestrator** (`orchestrator.flow.Orchestrator`)
-  - Coordinates the agent execution order and writes outputs.
+This raw dictionary is the input to the system.
 
-A minimal orchestration diagram (Mermaid):
+4.2 ParserAgent
+Responsibilities:
 
-```mermaid
-flowchart TD
+Converts raw product dictionary into internal models (Product, FictionalProduct)
 
-    A[Raw Product Data] --> B[ParserAgent]
-    B --> C[QuestionGeneratorAgent]
-    C --> D[ContentPlannerAgent]
-    D --> E[PageAssemblerAgent]
-    D --> F[FAQ Template]
-    E --> G[Product Page Template]
-    E --> H[Comparison Page Template]
+Initializes PageContext with:
 
-    F --> I[faq.json]
-    G --> J[product_page.json]
-    H --> K[comparison_page.json]
+base product
+
+fictional product
+
+empty lists for questions and FAQs
+
+empty product & comparison page structures
+
+Output: PageContext passed to next agent.
+
+4.3 QuestionGeneratorAgent
+Responsibilities:
+
+Generates customer-style questions
+
+Covers categories: informational, usage, safety, purchase, comparison
+
+Populates context.generated_questions
+
+4.4 ContentPlannerAgent
+Responsibilities:
+
+Converts questions into FAQ items
+
+Uses logic blocks to generate consistent answers
+
+Writes FAQ objects into context.faqs
+
+4.5 PageAssemblerAgent
+Responsibilities:
+
+Invokes page templates to create:
+
+product page
+
+comparison page
+
+FAQ page
+
+Fills:
+
+context.product_page_data
+
+context.comparison_page_data
+
+5. Logic Blocks
+Block	Description
+benefits_block.py	Generates benefits summary
+usage_block.py	Produces usage instructions
+safety_block.py	Generates safety notes
+comparison_block.py	Compares GlowBoost vs fictional product
+
+6. Templates Layer
+Template	Purpose
+product_template.py	Builds product description page
+faq_template.py	Builds FAQ page
+comparison_template.py	Builds product comparison page
+
+7. Orchestrator (Pipeline Controller)
+File: src/orchestrator/flow.py
+
+Pipeline Steps
+Parse raw product → PageContext
+
+Generate categorized questions
+
+Create FAQ items
+
+Assemble product & comparison pages
+
+Generate FAQ page
+
+Write JSON files
+
+Output directory:
+pgsql
+Copy code
+outputs/
+│── product_page.json
+│── faq.json
+│── comparison_page.json
+8. Running the Pipeline
+Run:
+
+bash
+Copy code
+python src/main.py
+This executes the full pipeline from parsing → FAQ → templates → JSON output.
+
+9. Output Summary
+product_page.json
+Contains:
+
+product details
+
+benefits summary
+
+usage instructions
+
+safety information
+
+price
+
+faq.json
+Contains 5+ structured FAQ items.
+
+comparison_page.json
+Contains:
+
+GlowBoost summary
+
+Fictional product summary
+
+Comparison points (ingredients, benefits, price)
+
+10. Sequence Diagram
+mermaid
+Copy code
+sequenceDiagram
+    participant Input as Raw Product Data
+    participant Parser as ParserAgent
+    participant QAgent as QuestionGeneratorAgent
+    participant Planner as ContentPlannerAgent
+    participant Assembler as PageAssemblerAgent
+    participant JSON as Output Writer
+
+    Input->>Parser: Raw product data
+    Parser->>QAgent: PageContext(base_product)
+    QAgent->>Planner: Generated questions
+    Planner->>Assembler: FAQ items
+    Assembler->>JSON: Final JSON pages
+11. Conclusion
+This system meets all Kasparro challenge requirements:
+
+✔ Multi-agent modular architecture
+✔ Logic block–powered content generation
+✔ Template-based page assembly
+✔ Generates Product, FAQ, and Comparison JSON pages
+✔ Professional folder structure & documentation
+✔ Easy to extend or upgrade
+
+The system is ready for future enhancements such as API endpoints, LLM integration, or UI display.
