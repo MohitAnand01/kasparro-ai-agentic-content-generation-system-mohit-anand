@@ -83,12 +83,13 @@ python src/main.py
  
   ├── product_page.json
   ├── faq.json
+  └── comparison_page.json
 ```
 ## Output Screenshot
 ## Code Running Succesfully
 <img width="946" height="323" alt="image" src="https://github.com/user-attachments/assets/19020a14-fec5-4df6-bad3-f51a8b87eb21" />
 
-  └── comparison_page.json
+ 
 
 ### Succesfully Getting the Desired Output
 
